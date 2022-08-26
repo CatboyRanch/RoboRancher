@@ -1,0 +1,17 @@
+{
+  "cmdprefix": "!",
+  "botChannelID" : "",
+  "adminRole" : "setme",
+  "modRole": "setme",
+  "memberRole": "setme",
+  "cageRole" : "setme",
+  "deleteFilter": false,
+  "filterWordsSoft": [
+    "words",
+    "here"
+  ],
+  "filterWordsHard" : [
+    "words",
+    "here"
+  ]
+}

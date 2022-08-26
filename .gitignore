@@ -1,0 +1,10 @@
+/out/
+/servers/
+/.idea/
+/out/
+/gradle/
+/build/
+/.gradle/
+RoboRancher.iml
+gradlew.bat
+gradlew
