@@ -24,6 +24,8 @@ public class RoboRancher {
         setupJDA();
         loadServers();
 
+        FileUtils.createFolder("RoboRancher/servers/");
+
         cmdManager = new CommandManager(this);
         cmdManager.registerCommand(new CConfig(this));
         cmdManager.registerCommand(new CSay(this));

@@ -20,8 +20,6 @@ import java.util.HashMap;
 
 public class ServerConfig {
     private final Server server;
-    @Getter
-    private final String serverPath;
     @Setter
     @Getter
     private String cmdPrefix;
@@ -52,11 +50,11 @@ public class ServerConfig {
     private final HashMap<String, RoleMessage> roleMessages = new HashMap<>();
     private final HashMap<String, ArrayList<String>> cagedUsers = new HashMap<>();
 
+    private String configPath;
+
     public ServerConfig(Server server) {
         this.server = server;
-        serverPath = String.format("%s/RoboRancher/servers/%s/", FileUtils.getJarDirectory(), server.getGuild().getId());
-        FileUtils.createFolder(serverPath);
-        String configPath = serverPath + "config.json";
+        configPath = String.format("%s/RoboRancher/servers/%s.json", FileUtils.getJarDirectory(), server.getGuild().getId());
         if (new File(configPath).exists()) {
             //Config exists
             JSONObject configJSON = new JSONObject(FileUtils.loadString(configPath));
@@ -139,7 +137,7 @@ public class ServerConfig {
         }
         json.put("cagedUsers", cagedUsersJSON);
 
-        FileUtils.saveString(serverPath + "config.json", json.toString(4));
+        FileUtils.saveString(configPath, json.toString(4));
     }
 
     public boolean isFilterHard(String string) {
