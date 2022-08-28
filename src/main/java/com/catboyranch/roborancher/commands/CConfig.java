@@ -175,10 +175,6 @@ public class CConfig extends CommandBase{
                     Message message = (Message)objects[0];
 
                     CommandArgument emojiInput = args[3];
-                    if(!emojiInput.isAnyEmojiKind()) {
-                        result.error(String.format("%s is not a valid emoji!", emojiInput.getText()));
-                        return;
-                    }
 
                     switch(type) {
                         case "add" -> {

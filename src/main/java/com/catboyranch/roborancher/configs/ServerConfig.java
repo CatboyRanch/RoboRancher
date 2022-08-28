@@ -110,8 +110,11 @@ public class ServerConfig {
         json.put("filterWordsHard", Utils.getJSONArrayFromArray(hardFilter));
 
         JSONArray roleMessagesJSON = new JSONArray();
-        for(String messageID : roleMessages.keySet())
-            roleMessagesJSON.put(roleMessages.get(messageID).toJSON());
+        for(String messageID : roleMessages.keySet()) {
+            RoleMessage rm = roleMessages.get(messageID);
+            if(!rm.getReactions().isEmpty())
+                roleMessagesJSON.put(rm.toJSON());
+        }
         json.put("roleMessages", roleMessagesJSON);
         json.put("rules", ruleFile.toJSON());
 

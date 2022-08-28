@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandArgument {
-    public enum TYPE {TEXT, USER_TAG, CHANNEL_TAG, ROLE_TAG, UNICODE_EMOJI, DISCORD_EMOJI, DISCORD_EMOJI_ANIMATED}
+    public enum TYPE {TEXT, USER_TAG, CHANNEL_TAG, ROLE_TAG}
 
     private final Server server;
     @Getter
@@ -29,15 +29,6 @@ public class CommandArgument {
         } else if(input.startsWith("<#")) {
             type = TYPE.CHANNEL_TAG;
             text = get("<#", ">", input);
-        } else if(input.startsWith("<:")) {
-            type = TYPE.DISCORD_EMOJI;
-            text = input;
-        } else if(input.startsWith("<a:")) {
-            type = TYPE.DISCORD_EMOJI_ANIMATED;
-            text = input;
-        } else if(Utils.isUnicodeEmoji(input)) {
-            type = TYPE.UNICODE_EMOJI;
-            text = input;
         } else {
             type = TYPE.TEXT;
             text = input;
@@ -67,14 +58,8 @@ public class CommandArgument {
             case ROLE_TAG -> { return String.format("<@&%s>", text); }
             case USER_TAG -> { return String.format("<@%s>", text); }
             case CHANNEL_TAG -> { return String.format("<#%s>", text); }
-            case DISCORD_EMOJI -> { return String.format("<:%s>", text); }
-            case DISCORD_EMOJI_ANIMATED -> { return String.format("<a:%s>", text); }
         }
         return text;
-    }
-
-    public boolean isAnyEmojiKind() {
-        return type == TYPE.DISCORD_EMOJI || type == TYPE.DISCORD_EMOJI_ANIMATED || type == TYPE.UNICODE_EMOJI;
     }
 
     private String get(String start, String end, String input) {

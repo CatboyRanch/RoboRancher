@@ -18,7 +18,6 @@ repositories {
 dependencies {
     implementation 'org.json:json:20220320'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-
     implementation 'net.dv8tion:JDA:5.0.0-alpha.17'
 
     //Lombok
