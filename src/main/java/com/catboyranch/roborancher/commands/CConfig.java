@@ -151,7 +151,7 @@ public class CConfig extends CommandBase{
                                 builder.addField(String.format("Rule %s", index), rule, false);
                                 index++;
                             }
-                            builder.addField(":warning:", "By reacting with the :warning: you agree to follow the rules.\nBreaking the might result in a mute/ban.", false);
+                            builder.addField(":warning:", "By reacting with the emoji you agree to follow the rules.\nBreaking the might result in a mute/ban.", false);
                             ((Message) objects[0]).editMessage(new MessageBuilder(builder).build()).queue();
                         });
                         return;
