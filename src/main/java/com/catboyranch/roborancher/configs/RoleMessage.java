@@ -1,16 +1,18 @@
 package com.catboyranch.roborancher.configs;
 
+import com.catboyranch.roborancher.utils.KeyValueStorage;
 import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RoleMessage {
     @Getter
     private final String id;
     @Getter
-    private final ArrayList<RoleMessageReaction> reactions = new ArrayList<>();
+    private final HashMap</*Emoji*/String, /*RoleID*/String> reactions = new HashMap<>();
 
     public RoleMessage(String id) {
         this.id = id;
@@ -20,16 +22,19 @@ public class RoleMessage {
         this.id = json.getString("id");
         JSONArray reactionsJSON = json.getJSONArray("reactions");
         for(int i = 0; i < reactionsJSON.length(); i++) {
-            reactions.add(new RoleMessageReaction(reactionsJSON.getJSONObject(i)));
+            JSONObject reactionJSON = reactionsJSON.getJSONObject(i);
+            String rEmoji = reactionJSON.getString("emoji");
+            String rRole = reactionJSON.getString("roleID");
+            reactions.put(rEmoji, rRole);
         }
     }
 
     public void addReaction(String emoji, String roleID) {
-        reactions.add(new RoleMessageReaction(emoji, roleID));
+        reactions.put(emoji, roleID);
     }
 
     public void removeReaction(String emoji) {
-        reactions.removeIf(reaction -> reaction.getEmoji().equals(emoji));
+        reactions.remove(emoji);
     }
 
     public boolean shouldRemove() {
@@ -40,8 +45,11 @@ public class RoleMessage {
         JSONObject json = new JSONObject();
         json.put("id", id);
         JSONArray reactionsJSON = new JSONArray();
-        for(RoleMessageReaction reaction : reactions) {
-            reactionsJSON.put(reaction.toJSON());
+        for(String emoji : reactions.keySet()) {
+            JSONObject reaction = new JSONObject();
+            reaction.put("emoji", emoji);
+            reaction.put("roleID", reactions.get(emoji));
+            reactionsJSON.put(reaction);
         }
         json.put("reactions", reactionsJSON);
         return json;

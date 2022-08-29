@@ -50,7 +50,7 @@ public class ServerConfig {
     private final HashMap<String, RoleMessage> roleMessages = new HashMap<>();
     private final HashMap<String, ArrayList<String>> cagedUsers = new HashMap<>();
 
-    private String configPath;
+    private final String configPath;
 
     public ServerConfig(Server server) {
         this.server = server;
@@ -223,11 +223,11 @@ public class ServerConfig {
                 }
                 RoleMessage rm = roleMessages.get(messageID);
                 Message message = (Message)objects[0];
-                for(RoleMessageReaction reaction : rm.getReactions())
-                    message.addReaction(Emoji.fromFormatted(reaction.getEmoji())).queue((success) -> {}, (failure) -> {
+                for(String emoji : rm.getReactions().keySet())
+                    message.addReaction(Emoji.fromFormatted(emoji)).queue((success) -> {}, (failure) -> {
                         //Emoji didnt work, remove it
-                        System.out.printf("Could not add emoji %s to message %s!\n", reaction.getEmoji(), messageID);
-                        rm.removeReaction(reaction.getEmoji());
+                        System.out.printf("Could not add emoji %s to message %s!\n", emoji, messageID);
+                        rm.removeReaction(emoji);
                     });
             });
         }
@@ -249,9 +249,10 @@ public class ServerConfig {
         if(!roleMessages.containsKey(messageID))
             return null;
 
-        for(RoleMessageReaction r : roleMessages.get(messageID).getReactions()) {
-            if(r.getEmoji().equals(emoji.getFormatted())) {
-                return RoleUtils.getRole(r.getRoleID(), server);
+        HashMap<String, String> map = roleMessages.get(messageID).getReactions();
+        for(String currentEmoji : map.keySet()) {
+            if(currentEmoji.equals(emoji.getFormatted())) {
+                return RoleUtils.getRole(map.get(currentEmoji), server);
             }
         }
         return null;
