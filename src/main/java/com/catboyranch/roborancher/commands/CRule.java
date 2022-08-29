@@ -2,10 +2,12 @@ package com.catboyranch.roborancher.commands;
 
 import com.catboyranch.roborancher.RoboRancher;
 import com.catboyranch.roborancher.Server;
+import com.catboyranch.roborancher.managers.RuleManager;
 import com.catboyranch.roborancher.utils.RoleType;
-import com.catboyranch.roborancher.ServerConfig;
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.Utils;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CRule extends CommandBase{
@@ -30,7 +32,19 @@ public class CRule extends CommandBase{
         }
 
         int index = Integer.parseInt(args[0].getText());
-        ServerConfig cfg = server.getConfig();
-        //if(index <= 0 || index >= server.)
+        RuleManager rm = server.getRuleManager();
+        if(index < 0 || index > rm.getRules().size()) {
+            result.error("Bad index!");
+            return;
+        }
+
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setTitle(String.format("Rule %s", index));
+        eb.setFooter(String.format("Requested by %s", event.getMember().getEffectiveName()));
+        index--;
+        eb.setDescription(rm.getRules().get(index));
+        event.getMessage().delete().queue();
+        event.getChannel().sendMessage(new MessageBuilder(eb).build()).queue();
+        result.successQuiet();
     }
 }
