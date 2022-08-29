@@ -1,23 +1,14 @@
 package com.catboyranch.roborancher;
 
-import com.catboyranch.roborancher.managers.RoleMessage;
-import com.catboyranch.roborancher.managers.RuleManager;
-import com.catboyranch.roborancher.utils.ChannelUtils;
 import com.catboyranch.roborancher.utils.FileUtils;
-import com.catboyranch.roborancher.utils.RoleUtils;
 import com.catboyranch.roborancher.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ServerConfig {
     private final Server server;
