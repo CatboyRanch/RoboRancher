@@ -32,7 +32,7 @@ public class CPraise extends CommandBase{
 
         if(args.length == 0 || args[0].getText().equals("help")) {
             String prefix = server.getConfig().getCmdPrefix();
-            String help = "Commands:";
+            String help = "Commands:\n";
             help +=     String.format("%spraise <user>\n", prefix);
             help +=     String.format("%spraise list\n", prefix);
             help +=     String.format("%spraise cooldown", prefix);

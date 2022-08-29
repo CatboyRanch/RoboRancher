@@ -21,7 +21,7 @@ public class Server {
     @Getter
     private final CageManager cageManager = new CageManager(this);
     @Getter
-    private final PraiseManager praiseManager = new PraiseManager();
+    private final PraiseManager praiseManager = new PraiseManager(this);
 
     public Server(Guild guild) {
         this.guild = guild;

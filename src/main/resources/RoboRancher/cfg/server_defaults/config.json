@@ -6,6 +6,7 @@
   "memberRole": "setme",
   "cageRole" : "setme",
   "deleteFilter": false,
+  "praiseCooldown": 86400,
   "filterWordsSoft": [
     "words",
     "here"

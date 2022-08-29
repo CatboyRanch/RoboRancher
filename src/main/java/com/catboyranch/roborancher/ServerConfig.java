@@ -30,6 +30,9 @@ public class ServerConfig {
     @Setter
     @Getter
     private boolean deleteFilter;
+    @Getter
+    @Setter
+    private long praiseCooldown;
 
     @Getter
     private final ArrayList<String> softFilter = new ArrayList<>();
@@ -37,6 +40,8 @@ public class ServerConfig {
     private final ArrayList<String> hardFilter = new ArrayList<>();
 
     private final String configPath;
+    private final JSONObject defaults = new JSONObject(FileUtils.loadFromJar("RoboRancher/cfg/server_defaults/config.json"));
+
 
     public ServerConfig(Server server) {
         this.server = server;
@@ -48,30 +53,47 @@ public class ServerConfig {
         } else {
             //Config does not exist, load defaults
             //TODO: Change RoboRancher path, thats dumb
-            JSONObject configJSON = new JSONObject(FileUtils.loadFromJar("RoboRancher/cfg/server_defaults/config.json"));
-            load(configJSON);
+            load(defaults);
         }
     }
 
     private void load(JSONObject json) {
-        cmdPrefix = json.getString("cmdprefix");
-        cagedRoleID = json.getString("cageRole");
-        adminRole = json.getString("adminRole");
-        modRole = json.getString("modRole");
-        memberRole = json.getString("memberRole");
-        deleteFilter = json.getBoolean("deleteFilter");
+        cmdPrefix = getStringOrDefault(json, "cmdprefix");
+        cagedRoleID = getStringOrDefault(json, "cageRole");
+        adminRole = getStringOrDefault(json, "adminRole");
+        modRole = getStringOrDefault(json, "modRole");
+        memberRole = getStringOrDefault(json, "memberRole");
+        deleteFilter = getBoolOrDefault(json, "deleteFilter");
+        praiseCooldown = getLongOrDefault(json, "praiseCooldown");
 
-        JSONArray softWordsJSON = json.getJSONArray("filterWordsSoft");
+        JSONArray softWordsJSON = getJSONArrayOrDefault(json, "filterWordsSoft");
         for(int i = 0; i < softWordsJSON.length(); i++)
             softFilter.add(softWordsJSON.getString(i));
 
-        JSONArray hardWordsJSON = json.getJSONArray("filterWordsHard");
+        JSONArray hardWordsJSON = getJSONArrayOrDefault(json, "filterWordsHard");
         for(int i = 0; i < hardWordsJSON.length(); i++)
             hardFilter.add(hardWordsJSON.getString(i));
 
         server.getCageManager().load(json);
         server.getRuleManager().load(json);
         server.getRoleMessageManager().load(json);
+        server.getPraiseManager().load(json);
+    }
+
+    private JSONArray getJSONArrayOrDefault(JSONObject json, String key) {
+        return json.has(key) ? json.getJSONArray(key) : defaults.getJSONArray(key);
+    }
+
+    private String getStringOrDefault(JSONObject json, String key) {
+        return json.has(key) ? json.getString(key) : defaults.getString(key);
+    }
+
+    private boolean getBoolOrDefault(JSONObject json, String key) {
+        return json.has(key) ? json.getBoolean(key) : defaults.getBoolean(key);
+    }
+
+    private long getLongOrDefault(JSONObject json, String key) {
+        return json.has(key) ? json.getLong(key) : defaults.getLong(key);
     }
 
     public void save() {
@@ -82,6 +104,7 @@ public class ServerConfig {
         json.put("modRole", modRole);
         json.put("memberRole", memberRole);
         json.put("deleteFilter", deleteFilter);
+        json.put("praiseCooldown", praiseCooldown);
 
         json.put("filterWordsSoft", Utils.getJSONArrayFromArray(softFilter));
         json.put("filterWordsHard", Utils.getJSONArrayFromArray(hardFilter));
@@ -89,6 +112,7 @@ public class ServerConfig {
         json.put("roleMessages", server.getRoleMessageManager().toJSON());
         json.put("rules", server.getRuleManager().toJSON());
         json.put("cagedUsers", server.getCageManager().toJSON());
+        json.put("praiseSystem", server.getPraiseManager().toJSON());
 
         FileUtils.saveString(configPath, json.toString(4));
     }

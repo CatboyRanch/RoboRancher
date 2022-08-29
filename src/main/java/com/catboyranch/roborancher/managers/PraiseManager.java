@@ -1,5 +1,6 @@
 package com.catboyranch.roborancher.managers;
 
+import com.catboyranch.roborancher.Server;
 import com.catboyranch.roborancher.utils.TimeUtils;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
@@ -9,9 +10,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class PraiseManager {
+    private final Server server;
     @Getter
     private final HashMap<String, Integer> praises = new HashMap<>();
     private final HashMap<String, Long> cooldowns = new HashMap<>();
+
+    public PraiseManager(Server server) {
+        this.server = server;
+    }
 
     public void addPraise(Member member) {
         String id = member.getId();
@@ -24,8 +30,7 @@ public class PraiseManager {
     public void addCooldown(Member member) {
         String id = member.getId();
         long unix = TimeUtils.getUnixTime();
-        long UNIX_24HRS = 86400;
-        cooldowns.put(id, unix + UNIX_24HRS);
+        cooldowns.put(id, unix + server.getConfig().getPraiseCooldown());
     }
 
     public boolean isOnCooldown(Member member) {
@@ -88,6 +93,7 @@ public class PraiseManager {
             JSONObject userJSON = new JSONObject();
             userJSON.put("userID", userID);
             userJSON.put("cooldown", cooldowns.get(userID));
+            cooldownsJSON.put(userJSON);
         }
 
         JSONObject data = new JSONObject();
