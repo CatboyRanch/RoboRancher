@@ -1,10 +1,10 @@
 package com.catboyranch.roborancher.commands;
 
-import com.catboyranch.roborancher.configs.ServerConfig;
+import com.catboyranch.roborancher.managers.CageManager;
 import com.catboyranch.roborancher.utils.MemberUtils;
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.Utils;
-import com.catboyranch.roborancher.configs.RoleType;
+import com.catboyranch.roborancher.utils.RoleType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import com.catboyranch.roborancher.RoboRancher;
@@ -27,14 +27,14 @@ public class CCage extends CommandBase{
         }
 
         Member toCage = args[0].getType() == CommandArgument.TYPE.USER_TAG ? args[0].getMember() : MemberUtils.getMemberById(server, args[0].getText());
-        ServerConfig cfg = server.getConfig();
+        CageManager cm = server.getCageManager();
         if(toCage != null) {
-            if(cfg.isCaged(toCage)) {
+            if(cm.isCaged(toCage)) {
                 result.error("Member is already caged!");
                 return;
             }
 
-            cfg.cageUser(toCage);
+            cm.cageUser(toCage);
             result.success();
             return;
         }

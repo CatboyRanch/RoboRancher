@@ -1,31 +1,35 @@
-package com.catboyranch.roborancher.configs;
+package com.catboyranch.roborancher.managers;
 
+import com.catboyranch.roborancher.utils.KeyValueStorage;
 import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class RuleFile {
+public class RuleManager {
     @Getter
     private final ArrayList<String> rules = new ArrayList<>();
 
-    public RuleFile() {}
+    public void load(JSONObject json) {
+        if(!json.has("rules"))
+            return;
 
-    public RuleFile(JSONArray json) {
+        JSONArray rulesJSON = json.getJSONArray("rules");
+
         //Load
         int maxRules = 0;
-        ArrayList<Rule> loadedRules = new ArrayList<>();
-        for(int i = 0; i < json.length(); i++) {
-            JSONObject rule = json.getJSONObject(i);
+        ArrayList<KeyValueStorage<Integer, String>> loadedRules = new ArrayList<>();
+        for(int i = 0; i < rulesJSON.length(); i++) {
+            JSONObject rule = rulesJSON.getJSONObject(i);
             int index = rule.getInt("index");
             String text = rule.getString("text");
             if(maxRules < index)
                 maxRules = index;
-            loadedRules.add(new Rule(index, text));
+            loadedRules.add(new KeyValueStorage<>(index, text));
         }
-        for(Rule r : loadedRules) {
-            rules.add(r.index(), r.text());
+        for(KeyValueStorage<Integer, String> r : loadedRules) {
+            rules.add(r.getKey(), r.getValue());
         }
     }
 

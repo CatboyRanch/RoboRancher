@@ -1,12 +1,10 @@
 package com.catboyranch.roborancher.utils;
 
-import com.catboyranch.roborancher.configs.RoleType;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -62,5 +60,14 @@ public class Utils {
         }
         parts.add(current.toString());
         return parts;
+    }
+
+    public static boolean isInteger(String string) {
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch(Exception ignored) {
+            return false;
+        }
     }
 }

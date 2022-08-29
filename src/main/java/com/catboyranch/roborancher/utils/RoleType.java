@@ -1,4 +1,4 @@
-package com.catboyranch.roborancher.configs;
+package com.catboyranch.roborancher.utils;
 
 public enum RoleType {
     ADMIN, MODERATOR, MEMBER, EVERYONE

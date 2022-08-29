@@ -2,19 +2,13 @@ package com.catboyranch.roborancher.commands;
 
 import com.catboyranch.roborancher.RoboRancher;
 import com.catboyranch.roborancher.Server;
-import com.catboyranch.roborancher.configs.RoleType;
+import com.catboyranch.roborancher.utils.RoleType;
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.MemberUtils;
 import com.catboyranch.roborancher.utils.TimestampType;
 import com.catboyranch.roborancher.utils.Utils;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.sql.Time;
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 public class CInfo extends CommandBase{
 

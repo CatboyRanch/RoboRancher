@@ -14,6 +14,9 @@ import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RoboRancher {
     private static JDA jda;
@@ -36,6 +39,20 @@ public class RoboRancher {
         cmdManager.registerCommand(new CUncage(this));
         cmdManager.registerCommand(new CCat(this));
         cmdManager.registerCommand(new CInfo(this));
+        cmdManager.registerCommand(new CRule(this));
+        cmdManager.registerCommand(new CPraise(this));
+
+        Timer timer = new Timer();
+        int time = 1000 * 60 * 5;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Saving config...");
+                for(String serverID : servers.keySet())
+                    servers.get(serverID).getConfig().save();
+                System.out.println("Done!");
+            }
+        }, time, time);
     }
 
     private void loadServers() {
@@ -47,8 +64,10 @@ public class RoboRancher {
     private void setupJDA(){
         JSONObject mainConfig = new JSONObject(FileUtils.loadAndVerify("RoboRancher/cfg/", "config.json"));
         if(mainConfig.getString("token").equals("token")) {
-            System.out.println("Please set your token in the config.json file.");
-            System.exit(0);
+            System.out.print("Please enter token: ");
+            String token = new Scanner(System.in).nextLine();
+            mainConfig.put("token", token);
+            FileUtils.saveString("RoboRancher/cfg/config.json", mainConfig.toString(4));
         }
 
         JDABuilder builder = JDABuilder.create(mainConfig.getString("token"), GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_PRESENCES);

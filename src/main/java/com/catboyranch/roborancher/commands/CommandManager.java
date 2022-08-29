@@ -1,7 +1,7 @@
 package com.catboyranch.roborancher.commands;
 
-import com.catboyranch.roborancher.configs.RoleType;
-import com.catboyranch.roborancher.configs.ServerConfig;
+import com.catboyranch.roborancher.utils.RoleType;
+import com.catboyranch.roborancher.ServerConfig;
 import com.catboyranch.roborancher.utils.ChannelUtils;
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.RoleUtils;
