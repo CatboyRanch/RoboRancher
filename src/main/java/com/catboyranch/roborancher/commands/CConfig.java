@@ -34,6 +34,7 @@ public class CConfig extends CommandBase{
             message +=          String.format("%sconfig save\n", cP);
             message +=          String.format("%sconfig prefix <prefix> (current: %s)\n", cP, cfg.getCmdPrefix());
             message +=          String.format("%sconfig setrole <admin/mod/member/caged> <role-id> (current: admin(%s), moderator(%s), member(%s), caged(%s))\n", cP, RoleUtils.getRoleName(cfg.getAdminRole(), server), RoleUtils.getRoleName(cfg.getModRole(), server), RoleUtils.getRoleName(cfg.getMemberRole(), server), RoleUtils.getRoleName(cfg.getCagedRoleID(), server));
+            message +=          String.format("%sconfig praiseCooldown <unix-seconds> (current: %s)\n", cP, cfg.getPraiseCooldown());
             message +=          "\n:desktop: Filter commands: :desktop:\n";
             message +=          String.format("%sconfig filter <true/false> (current: %s)\n", cP, cfg.isDeleteFilter());
             message +=          String.format("%sconfig addFilter <soft/hard> <word> (current: soft(|| %s ||), hard(|| %s ||)\n", cP, cfg.getSoftFilter(), cfg.getHardFilter());
@@ -71,6 +72,15 @@ public class CConfig extends CommandBase{
                         return;
                     }
                 }
+                result.success();
+                return;
+            }
+            case "praiseCooldown" -> {
+                if(!Utils.isLong(args[1].getText())) {
+                    result.error("Input must be in seconds!");
+                    return;
+                }
+                cfg.setPraiseCooldown(Long.parseLong(args[1].getText()));
                 result.success();
                 return;
             }
