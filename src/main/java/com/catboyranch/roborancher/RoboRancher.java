@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RoboRancher {
     private static JDA jda;
@@ -39,6 +41,18 @@ public class RoboRancher {
         cmdManager.registerCommand(new CInfo(this));
         cmdManager.registerCommand(new CRule(this));
         cmdManager.registerCommand(new CPraise(this));
+
+        Timer timer = new Timer();
+        int time = 1000 * 60 * 5;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Saving config...");
+                for(String serverID : servers.keySet())
+                    servers.get(serverID).getConfig().save();
+                System.out.println("Done!");
+            }
+        }, time, time);
     }
 
     private void loadServers() {
