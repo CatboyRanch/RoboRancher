@@ -1,5 +1,6 @@
 package com.catboyranch.roborancher;
 
+import com.catboyranch.roborancher.managers.CageManager;
 import com.catboyranch.roborancher.managers.RoleMessageManager;
 import com.catboyranch.roborancher.managers.RuleManager;
 import lombok.Getter;
@@ -16,6 +17,8 @@ public class Server {
     private final RoleMessageManager roleMessageManager = new RoleMessageManager(this);
     @Getter
     private final RuleManager ruleManager = new RuleManager();
+    @Getter
+    private final CageManager cageManager = new CageManager(this);
 
     public Server(Guild guild) {
         this.guild = guild;

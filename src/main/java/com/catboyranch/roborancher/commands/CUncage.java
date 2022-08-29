@@ -1,6 +1,6 @@
 package com.catboyranch.roborancher.commands;
 
-import com.catboyranch.roborancher.ServerConfig;
+import com.catboyranch.roborancher.managers.CageManager;
 import com.catboyranch.roborancher.utils.MemberUtils;
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.Utils;
@@ -27,14 +27,14 @@ public class CUncage extends CommandBase{
         }
 
         Member toCage = args[0].getType() == CommandArgument.TYPE.USER_TAG ? args[0].getMember() : MemberUtils.getMemberById(server, args[0].getText());
-        ServerConfig cfg = server.getConfig();
+        CageManager cm = server.getCageManager();
         if(toCage != null) {
-            if(!cfg.isCaged(toCage)) {
+            if(!cm.isCaged(toCage)) {
                 result.error("Member is not caged!");
                 return;
             }
 
-            cfg.uncageUser(toCage);
+            cm.uncageUser(toCage);
             result.success();
             return;
         }

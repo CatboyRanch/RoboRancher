@@ -45,8 +45,6 @@ public class ServerConfig {
     @Getter
     private final ArrayList<String> hardFilter = new ArrayList<>();
 
-    private final HashMap<String, ArrayList<String>> cagedUsers = new HashMap<>();
-
     private final String configPath;
 
     public ServerConfig(Server server) {
@@ -80,18 +78,7 @@ public class ServerConfig {
         for(int i = 0; i < hardWordsJSON.length(); i++)
             hardFilter.add(hardWordsJSON.getString(i));
 
-        if(json.has("cagedUsers")) {
-            JSONArray cagedUsersJSON = json.getJSONArray("cagedUsers");
-            for(int i = 0; i < cagedUsersJSON.length(); i++) {
-                JSONObject cagedUserJSON = cagedUsersJSON.getJSONObject(i);
-                ArrayList<String> cagedUserRoles = new ArrayList<>();
-                JSONArray rolesJSON = cagedUserJSON.getJSONArray("roles");
-                for(int i2 = 0; i2 < rolesJSON.length(); i2++)
-                    cagedUserRoles.add(rolesJSON.getString(i2));
-                cagedUsers.put(cagedUserJSON.getString("userID"), cagedUserRoles);
-            }
-        }
-
+        server.getCageManager().load(json);
         server.getRuleManager().load(json);
         server.getRoleMessageManager().load(json);
     }
@@ -110,16 +97,7 @@ public class ServerConfig {
 
         json.put("roleMessages", server.getRoleMessageManager().toJSON());
         json.put("rules", server.getRuleManager().toJSON());
-
-        //Caged users
-        JSONArray cagedUsersJSON = new JSONArray();
-        for(String userID : cagedUsers.keySet()) {
-            JSONObject cagedUserJSON = new JSONObject();
-            cagedUserJSON.put("userID", userID);
-            cagedUserJSON.put("roles", cagedUsers.get(userID));
-            cagedUsersJSON.put(cagedUserJSON);
-        }
-        json.put("cagedUsers", cagedUsersJSON);
+        json.put("cagedUsers", server.getCageManager().toJSON());
 
         FileUtils.saveString(configPath, json.toString(4));
     }
@@ -141,34 +119,6 @@ public class ServerConfig {
             }
         }
         return false;
-    }
-
-    public boolean isCaged(Member member) {
-        return cagedUsers.containsKey(member.getId());
-    }
-
-    public void cageUser(Member member) {
-        if(cagedUsers.containsKey(member.getId()))
-            return;
-
-        ArrayList<String> roles = new ArrayList<>();
-        for(Role role : member.getRoles()) {
-            roles.add(role.getId());
-            RoleUtils.removeRole(member, role);
-        }
-        RoleUtils.addRole(member, cagedRoleID);
-        cagedUsers.put(member.getId(), roles);
-    }
-
-    public void uncageUser(Member member) {
-        String id = member.getId();
-        if(!cagedUsers.containsKey(id))
-            return;
-
-        RoleUtils.removeRole(member, cagedRoleID);
-        for(String roleID : cagedUsers.get(id))
-            RoleUtils.addRole(member, roleID);
-        cagedUsers.remove(id);
     }
 
     public void addSoftWord(String word) {
