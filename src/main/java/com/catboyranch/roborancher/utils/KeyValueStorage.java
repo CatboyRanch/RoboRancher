@@ -13,4 +13,8 @@ public class KeyValueStorage<Key, Value> {
         this.key = key;
         this.value = value;
     }
+
+    public String toString() {
+        return String.format("KeyValueStorage(Key: %s, Value: %s)", key, value);
+    }
 }

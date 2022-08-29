@@ -1,6 +1,7 @@
 package com.catboyranch.roborancher.managers;
 
 import com.catboyranch.roborancher.utils.TimeUtils;
+import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class PraiseManager {
+    @Getter
     private final HashMap<String, Integer> praises = new HashMap<>();
     private final HashMap<String, Long> cooldowns = new HashMap<>();
 
@@ -38,6 +40,13 @@ public class PraiseManager {
         }
 
         return true;
+    }
+
+    public int getPraises(Member member) {
+        String id = member.getId();
+        if(!praises.containsKey(id))
+            return 0;
+        return praises.get(id);
     }
 
     public long getCooldown(Member member) {

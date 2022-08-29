@@ -38,6 +38,7 @@ public class RoboRancher {
         cmdManager.registerCommand(new CCat(this));
         cmdManager.registerCommand(new CInfo(this));
         cmdManager.registerCommand(new CRule(this));
+        cmdManager.registerCommand(new CPraise(this));
     }
 
     private void loadServers() {
