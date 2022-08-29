@@ -1,7 +1,7 @@
 package com.catboyranch.roborancher.events;
 
 import com.catboyranch.roborancher.RoboRancher;
-import com.catboyranch.roborancher.configs.ServerConfig;
+import com.catboyranch.roborancher.Server;
 import com.catboyranch.roborancher.utils.RoleUtils;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -20,8 +20,8 @@ public class MessageEvents extends ListenerAdapter {
         if(event.getMember() == null)
             return;
 
-        ServerConfig cfg = rancher.getServer(event.getGuild().getId()).getConfig();
-        Role role = cfg.getRoleForMessageEmoji(event.getMessageId(), event.getEmoji());
+        Server server = rancher.getServer(event.getGuild().getId());
+        Role role = server.getRoleMessageManager().getRoleForMessageEmoji(event.getMessageId(), event.getEmoji());
         if(role != null)
             RoleUtils.addRole(event.getMember(), role);
     }
@@ -31,8 +31,8 @@ public class MessageEvents extends ListenerAdapter {
         if(event.getMember() == null)
             return;
 
-        ServerConfig cfg = rancher.getServer(event.getGuild().getId()).getConfig();
-        Role role = cfg.getRoleForMessageEmoji(event.getMessageId(), event.getEmoji());
+        Server server = rancher.getServer(event.getGuild().getId());
+        Role role = server.getRoleMessageManager().getRoleForMessageEmoji(event.getMessageId(), event.getEmoji());
         if(role != null)
             RoleUtils.removeRole(event.getMember(), role);
     }

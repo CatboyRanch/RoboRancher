@@ -1,7 +1,7 @@
 package com.catboyranch.roborancher.events;
 
 import com.catboyranch.roborancher.RoboRancher;
-import com.catboyranch.roborancher.configs.ServerConfig;
+import com.catboyranch.roborancher.ServerConfig;
 import com.catboyranch.roborancher.utils.RoleUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;

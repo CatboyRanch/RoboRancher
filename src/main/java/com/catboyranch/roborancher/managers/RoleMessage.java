@@ -1,11 +1,9 @@
-package com.catboyranch.roborancher.configs;
+package com.catboyranch.roborancher.managers;
 
-import com.catboyranch.roborancher.utils.KeyValueStorage;
 import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoleMessage {

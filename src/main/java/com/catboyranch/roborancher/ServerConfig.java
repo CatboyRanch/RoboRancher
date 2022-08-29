@@ -1,6 +1,7 @@
-package com.catboyranch.roborancher.configs;
+package com.catboyranch.roborancher;
 
-import com.catboyranch.roborancher.Server;
+import com.catboyranch.roborancher.managers.RoleMessage;
+import com.catboyranch.roborancher.managers.RuleManager;
 import com.catboyranch.roborancher.utils.ChannelUtils;
 import com.catboyranch.roborancher.utils.FileUtils;
 import com.catboyranch.roborancher.utils.RoleUtils;
@@ -44,10 +45,6 @@ public class ServerConfig {
     @Getter
     private final ArrayList<String> hardFilter = new ArrayList<>();
 
-    @Getter
-    private RuleFile ruleFile;
-
-    private final HashMap<String, RoleMessage> roleMessages = new HashMap<>();
     private final HashMap<String, ArrayList<String>> cagedUsers = new HashMap<>();
 
     private final String configPath;
@@ -83,14 +80,6 @@ public class ServerConfig {
         for(int i = 0; i < hardWordsJSON.length(); i++)
             hardFilter.add(hardWordsJSON.getString(i));
 
-        if(json.has("roleMessages")) {
-            JSONArray roleMessagesJSON = json.getJSONArray("roleMessages");
-            for (int i = 0; i < roleMessagesJSON.length(); i++) {
-                JSONObject rmJSON = roleMessagesJSON.getJSONObject(i);
-                roleMessages.put(rmJSON.getString("id"), new RoleMessage(rmJSON));
-            }
-        }
-
         if(json.has("cagedUsers")) {
             JSONArray cagedUsersJSON = json.getJSONArray("cagedUsers");
             for(int i = 0; i < cagedUsersJSON.length(); i++) {
@@ -103,7 +92,8 @@ public class ServerConfig {
             }
         }
 
-        ruleFile = json.has("rules") ? new RuleFile(json.getJSONArray("rules")) : new RuleFile();
+        server.getRuleManager().load(json);
+        server.getRoleMessageManager().load(json);
     }
 
     public void save() {
@@ -118,14 +108,8 @@ public class ServerConfig {
         json.put("filterWordsSoft", Utils.getJSONArrayFromArray(softFilter));
         json.put("filterWordsHard", Utils.getJSONArrayFromArray(hardFilter));
 
-        JSONArray roleMessagesJSON = new JSONArray();
-        for(String messageID : roleMessages.keySet()) {
-            RoleMessage rm = roleMessages.get(messageID);
-            if(!rm.getReactions().isEmpty())
-                roleMessagesJSON.put(rm.toJSON());
-        }
-        json.put("roleMessages", roleMessagesJSON);
-        json.put("rules", ruleFile.toJSON());
+        json.put("roleMessages", server.getRoleMessageManager().toJSON());
+        json.put("rules", server.getRuleManager().toJSON());
 
         //Caged users
         JSONArray cagedUsersJSON = new JSONArray();
@@ -203,58 +187,5 @@ public class ServerConfig {
 
     public void removeHardWord(String word) {
         hardFilter.remove(word);
-    }
-
-    //No validation
-    public void addRoleMessageEmoji(Message message, Emoji emoji, Role role) {
-        String messageID = message.getId();
-        if(!roleMessages.containsKey(messageID))
-            roleMessages.put(messageID, new RoleMessage(messageID));
-        roleMessages.get(messageID).addReaction(emoji.getFormatted(), role.getId());
-    }
-
-    public void ensureRoleMessageEmojis() {
-        for(String messageID : roleMessages.keySet()) {
-            ChannelUtils.getMessage(server, messageID, objects -> {
-                if(objects.length == 0) {
-                    System.out.println("Error ensuring role message emoji for message id " + messageID);
-                    roleMessages.remove(messageID);
-                    return;
-                }
-                RoleMessage rm = roleMessages.get(messageID);
-                Message message = (Message)objects[0];
-                for(String emoji : rm.getReactions().keySet())
-                    message.addReaction(Emoji.fromFormatted(emoji)).queue((success) -> {}, (failure) -> {
-                        //Emoji didnt work, remove it
-                        System.out.printf("Could not add emoji %s to message %s!\n", emoji, messageID);
-                        rm.removeReaction(emoji);
-                    });
-            });
-        }
-    }
-
-    public void removeRoleMessageEmoji(Message message, Emoji emoji) {
-        String messageID = message.getId();
-        if(!roleMessages.containsKey(messageID))
-            return;
-        RoleMessage rm = roleMessages.get(messageID);
-        rm.removeReaction(emoji.getFormatted());
-        if(rm.shouldRemove()) {
-            message.removeReaction(emoji).queue();
-            roleMessages.remove(messageID);
-        }
-    }
-
-    public Role getRoleForMessageEmoji(String messageID, Emoji emoji) {
-        if(!roleMessages.containsKey(messageID))
-            return null;
-
-        HashMap<String, String> map = roleMessages.get(messageID).getReactions();
-        for(String currentEmoji : map.keySet()) {
-            if(currentEmoji.equals(emoji.getFormatted())) {
-                return RoleUtils.getRole(map.get(currentEmoji), server);
-            }
-        }
-        return null;
     }
 }

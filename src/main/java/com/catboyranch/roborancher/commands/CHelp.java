@@ -1,6 +1,6 @@
 package com.catboyranch.roborancher.commands;
 
-import com.catboyranch.roborancher.configs.RoleType;
+import com.catboyranch.roborancher.utils.RoleType;
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.RoleUtils;
 import net.dv8tion.jda.api.entities.Member;

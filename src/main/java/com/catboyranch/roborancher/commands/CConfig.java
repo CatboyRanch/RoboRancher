@@ -1,8 +1,10 @@
 package com.catboyranch.roborancher.commands;
 
+import com.catboyranch.roborancher.managers.RoleMessageManager;
+import com.catboyranch.roborancher.managers.RuleManager;
 import com.catboyranch.roborancher.utils.*;
-import com.catboyranch.roborancher.configs.RoleType;
-import com.catboyranch.roborancher.configs.ServerConfig;
+import com.catboyranch.roborancher.utils.RoleType;
+import com.catboyranch.roborancher.ServerConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -102,11 +104,12 @@ public class CConfig extends CommandBase{
                 return;
             }
             case "rules" -> {
+                RuleManager ruleManager = server.getRuleManager();
                 switch (args[1].getText()) {
                     case "list" -> {
                         StringBuilder message = new StringBuilder("Rules: (Remember, arrays start at 0! :nerd_face:)\n");
                         int index = 0;
-                        for (String rule : cfg.getRuleFile().getRules()) {
+                        for (String rule : ruleManager.getRules()) {
                             message.append(String.format("%s] %s\n", index, rule));
                             index++;
                         }
@@ -121,7 +124,7 @@ public class CConfig extends CommandBase{
                                 rule.append(" ");
                             rule.append(args[i].getText());
                         }
-                        if (!cfg.getRuleFile().addRule(Integer.parseInt(args[2].getText()), rule.toString())) {
+                        if (!ruleManager.addRule(Integer.parseInt(args[2].getText()), rule.toString())) {
                             result.error("Could not add rule! Did you supply a good index?");
                             return;
                         }
@@ -129,7 +132,7 @@ public class CConfig extends CommandBase{
                         return;
                     }
                     case "remove" -> {
-                        cfg.getRuleFile().removeRule(Integer.parseInt(args[2].getText()));
+                        ruleManager.removeRule(Integer.parseInt(args[2].getText()));
                         result.success();
                         return;
                     }
@@ -147,7 +150,7 @@ public class CConfig extends CommandBase{
                             builder.setAuthor("Rules");
 
                             int index = 1;
-                            for (String rule : cfg.getRuleFile().getRules()) {
+                            for (String rule : ruleManager.getRules()) {
                                 builder.addField(String.format("Rule %s", index), rule, false);
                                 index++;
                             }
@@ -175,6 +178,7 @@ public class CConfig extends CommandBase{
                     Message message = (Message)objects[0];
 
                     CommandArgument emojiInput = args[3];
+                    RoleMessageManager manager = server.getRoleMessageManager();
 
                     switch(type) {
                         case "add" -> {
@@ -184,10 +188,10 @@ public class CConfig extends CommandBase{
                                 result.error(String.format("%s is not a valid role!", roleInput.getText()));
                                 return;
                             }
-                            cfg.addRoleMessageEmoji(message, Emoji.fromFormatted(emojiInput.getText()), role);
-                            cfg.ensureRoleMessageEmojis();
+                            manager.addRoleMessageEmoji(message, Emoji.fromFormatted(emojiInput.getText()), role);
+                            manager.ensureRoleMessageEmojis();
                         }
-                        case "remove" -> cfg.removeRoleMessageEmoji(message, Emoji.fromFormatted(emojiInput.getText()));
+                        case "remove" -> manager.removeRoleMessageEmoji(message, Emoji.fromFormatted(emojiInput.getText()));
                     }
                     result.success();
                 });

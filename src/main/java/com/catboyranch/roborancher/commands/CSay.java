@@ -2,7 +2,7 @@ package com.catboyranch.roborancher.commands;
 
 import com.catboyranch.roborancher.utils.CommandArgument;
 import com.catboyranch.roborancher.utils.Utils;
-import com.catboyranch.roborancher.configs.RoleType;
+import com.catboyranch.roborancher.utils.RoleType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import com.catboyranch.roborancher.RoboRancher;
 import com.catboyranch.roborancher.Server;

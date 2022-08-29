@@ -1,8 +1,7 @@
 package com.catboyranch.roborancher.utils;
 
 import com.catboyranch.roborancher.Server;
-import com.catboyranch.roborancher.configs.RoleType;
-import com.catboyranch.roborancher.configs.ServerConfig;
+import com.catboyranch.roborancher.ServerConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
