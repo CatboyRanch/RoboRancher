@@ -33,7 +33,7 @@ public class CRule extends CommandBase{
 
         int index = Integer.parseInt(args[0].getText());
         RuleManager rm = server.getRuleManager();
-        if(index < 0 || index > rm.getRules().size()) {
+        if(index <= 0 || index > rm.getRules().size()) {
             result.error("Bad index!");
             return;
         }
