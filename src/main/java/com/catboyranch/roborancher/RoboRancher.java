@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class RoboRancher {
     private static JDA jda;
@@ -47,8 +48,10 @@ public class RoboRancher {
     private void setupJDA(){
         JSONObject mainConfig = new JSONObject(FileUtils.loadAndVerify("RoboRancher/cfg/", "config.json"));
         if(mainConfig.getString("token").equals("token")) {
-            System.out.println("Please set your token in the config.json file.");
-            System.exit(0);
+            System.out.print("Please enter token: ");
+            String token = new Scanner(System.in).nextLine();
+            mainConfig.put("token", token);
+            FileUtils.saveString("RoboRancher/cfg/config.json", mainConfig.toString(4));
         }
 
         JDABuilder builder = JDABuilder.create(mainConfig.getString("token"), GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_PRESENCES);
