@@ -1,11 +1,10 @@
 package com.catboyranch.roborancher
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 
 class BotConfig {
-    @JsonIgnore private val location = File("RoboRancher/cfg/config.json")
+    private val location = File("RoboRancher/cfg/config.json")
     var token: String = "token"
     var activity: String = "Volleyball"
 
