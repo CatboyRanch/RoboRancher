@@ -1,6 +1,7 @@
 package com.catboyranch.roborancher
 
 import com.catboyranch.roborancher.commands.CCat
+import com.catboyranch.roborancher.commands.CPet
 import com.catboyranch.roborancher.commands.CSay
 import com.catboyranch.roborancher.commands.CommandManager
 import com.catboyranch.roborancher.configs.BotConfig
@@ -26,6 +27,7 @@ class RoboRancher {
         cmdManager = CommandManager(this)
         cmdManager.registerCommand(CCat(this))
         cmdManager.registerCommand(CSay(this))
+        cmdManager.registerCommand(CPet(this))
         jda.guilds.forEach { servers.add(Server(it)) }
     }
 
