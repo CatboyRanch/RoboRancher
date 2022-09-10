@@ -1,9 +1,7 @@
 package com.catboyranch.roborancher
 
-import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.*
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ThreadLocalRandom
@@ -72,5 +70,53 @@ object ChannelUtils {
         server.guild.channels.forEach { if(it.id == id) return true }
         return false
     }
+}
 
+object RoleUtils {
+    enum class RoleType { ADMIN, MODERATOR, MEMBER, EVERYONE }
+
+    fun getRole(server: Server, roleID: String): Role? {
+        server.guild.roles.forEach { if(it.id == roleID) return it }
+        return null
+    }
+
+    fun getRoleName(server: Server, roleID: String): String {
+        return getRole(server, roleID)?.name ?: "null"
+    }
+
+    fun hasRole(member: Member, roleID: String): Boolean {
+        member.roles.forEach { if(it.id == roleID) return true }
+        return false
+    }
+
+    fun hasRole(server: Server, member: Member, roleType: RoleType): Boolean {
+        val cfgData = server.config.getData()
+        val id: String = when(roleType) {
+            RoleType.ADMIN -> cfgData.adminRole
+            RoleType.MODERATOR -> cfgData.modRole
+            RoleType.MEMBER -> cfgData.memberRole
+            RoleType.EVERYONE -> return true
+        }
+        return hasRole(member, id)
+    }
+
+    fun hasAdminPermission(member: Member): Boolean = member.hasPermission(Permission.ADMINISTRATOR)
+
+    fun addRole(member: Member, role: Role): Boolean {
+        return try {
+            member.guild.addRoleToMember(member, role).queue()
+            true
+        } catch(exception: Throwable) {
+            false
+        }
+    }
+
+    fun addRole(member: Member, roleID: String): Boolean {
+        val role = member.guild.getRoleById(roleID)
+        if(role == null)
+            return false
+        else
+            addRole(member, role)
+        return true
+    }
 }

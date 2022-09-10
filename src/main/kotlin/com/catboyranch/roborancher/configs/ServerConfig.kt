@@ -9,6 +9,7 @@ class ServerConfigData {
     var cmdPrefix = "!"
     var cagedRoleID = "setme"
     var adminRole = "setme"
+    var modRole = "setme"
     var memberRole = "setme"
     var deleteFilter = false
     var softFilter = arrayListOf("word1", "word2", "word3")

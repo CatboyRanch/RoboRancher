@@ -22,6 +22,11 @@ class RoboRancher {
         jda.guilds.forEach { servers.add(Server(it)) }
     }
 
+    fun getServer(id: String):Server? {
+        servers.forEach { if(it.guild.id == id) return it }
+        return null
+    }
+
     private fun setupJDA() {
         File("RoboRancher/cfg/").mkdirs()
         File("RoboRancher/servers/").mkdirs()
