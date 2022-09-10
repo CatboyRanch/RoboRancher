@@ -66,18 +66,14 @@ class CommandManager(private val rancher: RoboRancher): ListenerAdapter() {
         if(runCommand || hasAdminPerm) {
             val result = object: CommandResult {
                 val msg = event.message
-
                 fun r(emoji: String) = msg.addReaction(Emoji.fromUnicode(emoji)).queue()
 
                 override fun success() = r("✅")
-
                 override fun successQuiet() { }
-
                 override fun error(message: String) {
-                    r("❌");
-                    msg.reply(message).queue();
+                    r("❌")
+                    msg.reply(message).queue()
                 }
-
             }
             cmdBase.run(cmd, server, event, result, *args)
         }
