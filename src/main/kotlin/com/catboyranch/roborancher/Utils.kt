@@ -57,10 +57,6 @@ object ChannelUtils {
         for(channel in server.guild.textChannels) {
             if(found)
                 break
-            channel.retrieveMessageById(messageID).queue {
-                found = true
-                onComplete.run(it)
-            }
             channel.retrieveMessageById(messageID).queue({
                 found = true
                 onComplete.run(it)
