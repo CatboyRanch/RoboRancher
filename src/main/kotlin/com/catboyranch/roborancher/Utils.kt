@@ -4,6 +4,10 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
 import java.io.File
 import java.nio.charset.StandardCharsets
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
@@ -125,4 +129,24 @@ object RoleUtils {
             addRole(member, role)
         return true
     }
+}
+
+object TimeUtils {
+    fun getUnixTime(): Long = Instant.now().epochSecond
+    fun toUnixTime(time: LocalDateTime): Long = time.atZone(ZoneId.systemDefault()).toEpochSecond()
+}
+
+enum class TimestampType(private val sign: String) {
+    SHORT_TIME("t"),
+    LONG_TIME("T"),
+    SHORT_DATE("d"),
+    LONG_DATE("D"),
+    LONG_DATE_SHORT_TIME("f"),
+    LONG_DATE_DOW_SHORT_TIME("F"),
+    RELATIVE("R");
+
+    fun formatNow(): String = format(TimeUtils.getUnixTime())
+    fun format(time: OffsetDateTime): String = format(time.toEpochSecond())
+    fun format(time: LocalDateTime): String = format(TimeUtils.toUnixTime(time))
+    fun format(unixTime: Long): String = "<t:$unixTime:$sign>"
 }
