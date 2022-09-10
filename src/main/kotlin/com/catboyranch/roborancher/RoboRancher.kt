@@ -1,9 +1,6 @@
 package com.catboyranch.roborancher
 
-import com.catboyranch.roborancher.commands.CCat
-import com.catboyranch.roborancher.commands.CPet
-import com.catboyranch.roborancher.commands.CSay
-import com.catboyranch.roborancher.commands.CommandManager
+import com.catboyranch.roborancher.commands.*
 import com.catboyranch.roborancher.configs.BotConfig
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -28,6 +25,7 @@ class RoboRancher {
         cmdManager.registerCommand(CCat(this))
         cmdManager.registerCommand(CSay(this))
         cmdManager.registerCommand(CPet(this))
+        cmdManager.registerCommand(CEdit(this))
         jda.guilds.forEach { servers.add(Server(it)) }
     }
 
