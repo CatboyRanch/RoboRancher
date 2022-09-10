@@ -8,7 +8,7 @@ class BotConfig {
     var token: String = "token"
     var activity: String = "Volleyball"
 
-    init {
+    fun init() {
         if(location.exists())
             load()
         else

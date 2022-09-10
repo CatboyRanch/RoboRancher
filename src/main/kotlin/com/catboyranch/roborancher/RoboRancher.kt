@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import java.io.File
+import javax.security.auth.login.LoginException
 
 class RoboRancher {
     private lateinit var jda: JDA
@@ -22,7 +23,8 @@ class RoboRancher {
         File("RoboRancher/cfg/").mkdirs()
         File("RoboRancher/servers/").mkdirs()
         val botConfig = BotConfig()
-        while(botConfig.token == "token") {
+        botConfig.init()
+        while(botConfig.token == "token" || botConfig.token.isBlank()) {
             print("Please enter token: ")
             val token = readLine()
             if(token != null) {
@@ -36,7 +38,14 @@ class RoboRancher {
         builder.setBulkDeleteSplittingEnabled(false)
         builder.setActivity(Activity.playing(botConfig.activity))
         //Add listeners
-        jda = builder.build()
-        jda.awaitReady()
+        try {
+            jda = builder.build()
+            jda.awaitReady()
+        } catch (exception: LoginException) {
+            botConfig.token = "token"
+            botConfig.save()
+            println("Bad token!\n")
+            setupJDA()
+        }
     }
 }
