@@ -87,6 +87,8 @@ object RoleUtils {
         return true
     }
 
+    fun isRole(server: Server, roleID: String): Boolean = getRole(server, roleID) != null
+
     fun getRole(server: Server, roleID: String): Role? {
         server.guild.roles.forEach { if(it.id == roleID) return it }
         return null

@@ -21,7 +21,7 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                 ${p}config help
                 ${p}config save
                 ${p}config prefix <prefix> (current: $p)
-                ${p}config setrole <admin/mod/member/caged> <role-id> (current: admin(${data.adminRole}), moderator(${data.modRole}), member(${data.memberRole})
+                ${p}config setrole <admin/mod/member/caged> <role-id> (current: admin(${data.adminRole}), moderator(${data.modRole}), member(${data.memberRole}, caged(${data.cagedRoleID}))
                 ${p}config praisecooldown <unix-seconds> (current: ${data.praiseCooldown})
                 
                 :desktop: Filter commands: :desktop:
@@ -43,5 +43,30 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
             return
         }
 
+        when(args[0].text) {
+            "prefix" -> data.cmdPrefix = args[1].text
+            "setrole" -> {
+                val roleType = args[1].text
+                val roleID = args[2].text
+                if(!RoleUtils.isRole(server, roleID)) {
+                    result.error("Role not found!")
+                    return
+                }
+
+                when(roleType) {
+                    "admin" -> data.adminRole = roleID
+                    "mod", "moderator" -> data.modRole = roleID
+                    "member" -> data.memberRole = roleID
+                    "caged" -> data.cagedRoleID = roleID
+                    else -> {
+                        result.error("Bad role type!")
+                        return
+                    }
+                }
+                result.success()
+                return
+            }
+        }
+        result.success()
     }
 }
