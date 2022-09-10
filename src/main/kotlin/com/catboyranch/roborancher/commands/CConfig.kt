@@ -4,6 +4,7 @@ import com.catboyranch.roborancher.RoboRancher
 import com.catboyranch.roborancher.RoleUtils
 import com.catboyranch.roborancher.Server
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import okhttp3.internal.toLongOrDefault
 
 class CConfig(rancher: RoboRancher): CommandBase(rancher) {
     override val name = "config"
@@ -71,6 +72,43 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                 result.success()
                 return
             }
+            "praiseCooldown" -> {
+                val seconds = args[1].text.toLongOrNull()
+                if(seconds == null) {
+                    result.error("Input must be in seconds!")
+                    return
+                }
+                data.praiseCooldown = seconds
+            }
+            "filter" -> {
+                val bool = args[1].text.toBooleanStrictOrNull()
+                if(bool == null) {
+                    result.error("Input must be either true or false!")
+                    return
+                }
+                data.deleteFilter = bool
+            }
+            "addFilter" -> {
+                when(args[1].text) {
+                    "soft" -> if(!data.softFilter.contains(args[2].text)) data.softFilter.add(args[2].text)
+                    "hard" -> if(!data.hardFilter.contains(args[2].text)) data.hardFilter.add(args[2].text)
+                    else -> {
+                        result.error("Input must be soft or hard!")
+                        return
+                    }
+                }
+            }
+            "delFilter" -> {
+                when(args[1].text) {
+                    "soft" -> data.softFilter.remove(args[2].text)
+                    "hard" -> data.hardFilter.remove(args[2].text)
+                    else -> {
+                        result.error("Input must be soft or hard!")
+                        return
+                    }
+                }
+            }
+
         }
         result.success()
     }
