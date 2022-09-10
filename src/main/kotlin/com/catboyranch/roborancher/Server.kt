@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.Guild
 class Server(val guild: Guild) {
     val config: ServerConfig = ServerConfig(this)
     val ruleManager = RuleManager(config.getData())
-    val cageManager = CageManager(config.getData())
+    val cageManager = CageManager(this)
 
     init {
     }

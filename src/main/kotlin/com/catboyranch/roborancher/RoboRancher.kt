@@ -26,6 +26,7 @@ class RoboRancher {
         cmdManager.registerCommand(CSay(this))
         cmdManager.registerCommand(CPet(this))
         cmdManager.registerCommand(CEdit(this))
+        cmdManager.registerCommand(CConfig(this))
         jda.guilds.forEach { servers.add(Server(it)) }
     }
 
