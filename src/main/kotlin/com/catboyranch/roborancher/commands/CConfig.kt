@@ -152,9 +152,20 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                             }
                         })
                     }
+                    else -> {
+                        result.error("Bad argument! Use list/add/remove or send!")
+                        return
+                    }
                 }
             }
-
+            "rolemsg" -> {
+                //TODO: Implement
+            }
+            "save" -> cfg.save()
+            else -> {
+                result.error("Bad command! try ${data.cmdPrefix}config help")
+                return
+            }
         }
         result.success()
     }
