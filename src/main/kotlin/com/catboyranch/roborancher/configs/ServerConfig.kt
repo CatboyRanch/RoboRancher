@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ServerConfigData {
     var cmdPrefix = "!"
@@ -18,6 +19,7 @@ class ServerConfigData {
     var hardFilter = arrayListOf("word1", "word2", "word3")
     var praiseCooldown = 86400L
     var rules = ArrayList<String>()
+    var cagedUsers = HashMap<String, ArrayList<String>>()
 }
 
 class ServerConfig(private val server: Server) {

@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class JoinListener(private val rancher: RoboRancher): ListenerAdapter() {
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
-        rancher.getServer(event.guild.id)?.cageManager?.cageIfNeeded(event.member)
+        rancher.getServer(event.guild.id)?.cageManager?.cage(event.member)
     }
 }
 

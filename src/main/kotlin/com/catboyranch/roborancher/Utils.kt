@@ -81,6 +81,12 @@ object ChannelUtils {
 object RoleUtils {
     enum class RoleType { ADMIN, MODERATOR, MEMBER, EVERYONE }
 
+    fun removeRole(member: Member, server: Server, roleID: String): Boolean {
+        val role = getRole(server, roleID) ?: return false
+        server.guild.removeRoleFromMember(member, role).queue()
+        return true
+    }
+
     fun getRole(server: Server, roleID: String): Role? {
         server.guild.roles.forEach { if(it.id == roleID) return it }
         return null
