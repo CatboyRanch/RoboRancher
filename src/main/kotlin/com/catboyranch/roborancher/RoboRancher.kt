@@ -1,5 +1,6 @@
 package com.catboyranch.roborancher
 
+import com.catboyranch.roborancher.commands.CCat
 import com.catboyranch.roborancher.commands.CommandManager
 import com.catboyranch.roborancher.configs.BotConfig
 import net.dv8tion.jda.api.JDA
@@ -22,6 +23,7 @@ class RoboRancher {
     init {
         setupJDA()
         cmdManager = CommandManager(this)
+        cmdManager.registerCommand(CCat(this))
         jda.guilds.forEach { servers.add(Server(it)) }
     }
 
