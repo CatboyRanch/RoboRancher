@@ -16,12 +16,17 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
 
         if(args.isEmpty() || args[0].text == "help") {
             val p = data.cmdPrefix
+            val adminName = RoleUtils.getRoleName(server, data.adminRole)
+            val modName = RoleUtils.getRoleName(server, data.modRole)
+            val memberName = RoleUtils.getRoleName(server, data.memberRole)
+            val cagedName = RoleUtils.getRoleName(server, data.cagedRoleID)
+
             val message = """
                 :desktop: General commands: :desktop:
                 ${p}config help
                 ${p}config save
                 ${p}config prefix <prefix> (current: $p)
-                ${p}config setrole <admin/mod/member/caged> <role-id> (current: admin(${data.adminRole}), moderator(${data.modRole}), member(${data.memberRole}, caged(${data.cagedRoleID}))
+                ${p}config setrole <admin/mod/member/caged> <role-id> (current: admin($adminName), moderator($modName), member($memberName), caged($cagedName))
                 ${p}config praisecooldown <unix-seconds> (current: ${data.praiseCooldown})
                 
                 :desktop: Filter commands: :desktop:
