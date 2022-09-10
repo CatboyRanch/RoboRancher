@@ -35,10 +35,16 @@ object FileUtils {
 
 }
 
+object MemberUtils {
+    fun getMember(server: Server, memberID: String): Member? {
+        return server.guild.getMemberById(memberID)
+    }
+}
+
 object ChannelUtils {
     fun sendPrivateMessage(member: Member, message: String) = member.user.openPrivateChannel().queue { it.sendMessage(message).queue() }
 
-    fun getChannel(guild: Guild, channelID: String): MessageChannel? = guild.getTextChannelById(channelID)
+    fun getChannel(server: Server, channelID: String): MessageChannel? = server.guild.getTextChannelById(channelID)
 
     fun getMessage(server: Server, messageID: String, onComplete: IFunction) {
         var found = false
