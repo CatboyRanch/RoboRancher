@@ -2,6 +2,7 @@ package com.catboyranch.roborancher
 
 import com.catboyranch.roborancher.commands.*
 import com.catboyranch.roborancher.configs.BotConfig
+import com.catboyranch.roborancher.managers.RuleManager
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity

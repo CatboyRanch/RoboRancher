@@ -4,7 +4,6 @@ import com.catboyranch.roborancher.RoboRancher
 import com.catboyranch.roborancher.RoleUtils
 import com.catboyranch.roborancher.Server
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import okhttp3.internal.toLongOrDefault
 
 class CConfig(rancher: RoboRancher): CommandBase(rancher) {
     override val name = "config"
@@ -106,6 +105,30 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                         result.error("Input must be soft or hard!")
                         return
                     }
+                }
+            }
+            "rules" -> {
+                val rm = server.ruleManager
+                when(args[1].text) {
+                    "list" -> {
+                        var message = "Rules: (Remember, arrays start at 0! :nerd_face:\n"
+                        rm.getRules().forEachIndexed { index, rule ->
+                            message += "$index] $rule\n"
+                        }
+                        event.channel.sendMessage(message).queue()
+                    }
+                    "add" -> {
+                        val index = args[2].text.toInt()
+                        if(index > rm.getRules().size) {
+                            result.error("Bad index!")
+                            return
+                        }
+                        var rule = ""
+                        for(i in 3 until args.size)
+                            rule += " ${args[i].text}"
+                        rm.addRule(index, rule)
+                    }
+                    "remove" -> rm.removeRule(args[2].text.toInt())
                 }
             }
 
