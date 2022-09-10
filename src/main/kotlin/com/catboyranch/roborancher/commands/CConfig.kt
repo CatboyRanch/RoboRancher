@@ -1,9 +1,12 @@
 package com.catboyranch.roborancher.commands
 
-import com.catboyranch.roborancher.RoboRancher
-import com.catboyranch.roborancher.RoleUtils
-import com.catboyranch.roborancher.Server
+import com.catboyranch.roborancher.*
+import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.MessageBuilder
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import java.awt.Color
+import java.time.Instant
 
 class CConfig(rancher: RoboRancher): CommandBase(rancher) {
     override val name = "config"
@@ -129,6 +132,26 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                         rm.addRule(index, rule)
                     }
                     "remove" -> rm.removeRule(args[2].text.toInt())
+                    "send" -> {
+                        ChannelUtils.getMessage(server, args[2].text, object: IFunction {
+                            override fun run(vararg args: Any) {
+                                if(args.isEmpty()) {
+                                    result.error("Message not found!")
+                                    return
+                                }
+                                val builder = EmbedBuilder()
+                                builder.setDescription("Please read these rules thoroughly and accept them at the bottom")
+                                builder.setColor(Color(16544292))
+                                builder.setTimestamp(Instant.now())
+                                builder.setFooter("Last updated")
+                                builder.setAuthor("Rules")
+                                rm.getRules().forEachIndexed { index, rule -> builder.addField("Rule ${index + 1}", rule, false) }
+                                builder.addField(":warning:", "By reacting with the emoji you agree to follow the rules.\nBreaking the might result in a mute/ban.", false)
+                                val msg = args[0] as Message
+                                msg.editMessage(MessageBuilder(builder).build()).queue()
+                            }
+                        })
+                    }
                 }
             }
 
