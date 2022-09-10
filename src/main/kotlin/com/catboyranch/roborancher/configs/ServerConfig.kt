@@ -4,6 +4,8 @@ import com.catboyranch.roborancher.FileUtils
 import com.catboyranch.roborancher.Server
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ServerConfigData {
     var cmdPrefix = "!"
@@ -33,6 +35,20 @@ class ServerConfig(private val server: Server) {
     }
 
     fun getData(): ServerConfigData = data
+
+    fun isFilterHard(string: String): Boolean {
+        data.hardFilter.forEach { if(string.lowercase() == it) return true }
+        return false
+    }
+
+    fun isFilterSoft(string: String): Boolean {
+        data.softFilter.forEach {
+            val wordCutoff = 4
+            if (string.contains(" $it ") || string.contains(" $it") || string.contains("$it ") || string == it || (string.contains(it) && string.length <= it.length + wordCutoff))
+                return true
+        }
+        return false
+    }
 
     private fun load() { data = ObjectMapper().readValue(File(configPath), ServerConfigData::class.java) }
     fun save() = ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(File(configPath), data)

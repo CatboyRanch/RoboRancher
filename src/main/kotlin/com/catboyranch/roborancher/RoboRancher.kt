@@ -1,5 +1,6 @@
 package com.catboyranch.roborancher
 
+import com.catboyranch.roborancher.commands.CommandManager
 import com.catboyranch.roborancher.configs.BotConfig
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -15,10 +16,12 @@ fun main() {
 
 class RoboRancher {
     private lateinit var jda: JDA
+    private var cmdManager: CommandManager
     private val servers = ArrayList<Server>()
 
     init {
         setupJDA()
+        cmdManager = CommandManager(this)
         jda.guilds.forEach { servers.add(Server(it)) }
     }
 
@@ -26,6 +29,8 @@ class RoboRancher {
         servers.forEach { if(it.guild.id == id) return it }
         return null
     }
+
+    fun getJDA(): JDA = jda
 
     private fun setupJDA() {
         File("RoboRancher/cfg/").mkdirs()
