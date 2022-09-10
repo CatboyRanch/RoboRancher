@@ -1,3 +1,0 @@
-package com.catboyranch.roborancher.managers
-
-interface SaveableManager

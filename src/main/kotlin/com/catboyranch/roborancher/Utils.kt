@@ -26,11 +26,14 @@ object Utils {
 object FileUtils {
     private val DEFAULT_CHARSET = StandardCharsets.UTF_8
     private var jarDirectory: String
+
     init {
         val location = RoboRancher::class.java.protectionDomain.codeSource.location
         val filename = File(location.path).name
         jarDirectory = File(location.toURI()).path.replace(filename, "")
     }
+
+    fun getJarDirectory(): String = jarDirectory
 
 }
 

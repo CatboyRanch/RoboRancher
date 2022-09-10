@@ -1,13 +1,10 @@
 package com.catboyranch.roborancher.managers
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.catboyranch.roborancher.configs.ServerConfigData
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-class RuleManager: SaveableManager {
-    private val rules = ArrayList<Rule>()
+class RuleManager(private val configData: ServerConfigData) {
+    fun addRule(index: Int, text: String) = configData.rules.add(index, text)
+    fun removeRule(index: Int) = configData.rules.removeAt(index)
 
-    fun addRule(index: Int, text: String) = rules.add(index, Rule(index, text))
-    fun removeRule(index: Int) = rules.removeAt(index)
+    override fun toString(): String = configData.rules.toString()
 }
-
-data class Rule(val index: Int, val content: String)

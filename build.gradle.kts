@@ -29,7 +29,7 @@ tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes["Main-Class"] = "com.catboyranch.roborancher.MainKt"
+        attributes["Main-Class"] = "com.catboyranch.roborancher.RoboRancherKt"
     }
 
     dependsOn(configurations.runtimeClasspath)
