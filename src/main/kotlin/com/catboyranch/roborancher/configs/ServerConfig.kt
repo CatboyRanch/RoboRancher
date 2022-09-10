@@ -2,10 +2,8 @@ package com.catboyranch.roborancher.configs
 
 import com.catboyranch.roborancher.FileUtils
 import com.catboyranch.roborancher.Server
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
-import javax.xml.crypto.Data
 
 class ServerConfigData {
     var cmdPrefix = "!"
@@ -19,7 +17,7 @@ class ServerConfigData {
     var rules = ArrayList<String>()
 }
 
-class ServerConfig(@JsonIgnore private val server: Server) {
+class ServerConfig(private val server: Server) {
     private val configPath: String = "${FileUtils.getJarDirectory()}/RoboRancher/servers/${server.guild.id}.json"
     private lateinit var data: ServerConfigData
 
@@ -35,9 +33,6 @@ class ServerConfig(@JsonIgnore private val server: Server) {
 
     fun getData(): ServerConfigData = data
 
-    private fun load() {
-        data = ObjectMapper().readValue(File(configPath), ServerConfigData::class.java)
-    }
-
+    private fun load() { data = ObjectMapper().readValue(File(configPath), ServerConfigData::class.java) }
     fun save() = ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(File(configPath), data)
 }
