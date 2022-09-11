@@ -4,6 +4,7 @@ import com.catboyranch.roborancher.*
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.awt.Color
 import java.time.Instant
@@ -162,7 +163,31 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                 }
             }
             "rolemsg" -> {
-                //TODO: Implement
+                val type = args[1].text
+                val messageID = args[2].text
+                ChannelUtils.getMessage(server, messageID, object: IFunction {
+                    override fun run(vararg objects: Any) {
+                        if(objects.isEmpty()) {
+                            result.error("Message not found!")
+                            return
+                        }
+                        val message = objects[0] as Message
+                        val rmm = server.roleMessageManager
+                        val emojiInput = args[3]
+                        when(type) {
+                            "add" -> {
+                                val roleInput = args[4]
+                                val role = if(roleInput.type == CommandArgument.TYPE.ROLE_TAG) roleInput.getRole() else RoleUtils.getRole(server, roleInput.text)
+                                if(role == null) {
+                                    result.error("${roleInput.text} is not a valid rule!")
+                                    return
+                                }
+                                rmm.addRoleMessageEmoji(message, Emoji.fromFormatted(emojiInput.text), role)
+                            }
+                            "remove" -> rmm.removeRoleMessageEmoji(message, Emoji.fromFormatted(emojiInput.text))
+                        }
+                    }
+                })
             }
             "save" -> cfg.save()
             else -> {

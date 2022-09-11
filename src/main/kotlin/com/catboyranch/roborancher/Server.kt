@@ -10,7 +10,7 @@ class Server(val guild: Guild) {
     val config: ServerConfig = ServerConfig(this)
     val ruleManager = RuleManager(config.getData())
     val cageManager = CageManager(this)
-    val roleMessage = RoleMessageManager(this)
+    val roleMessageManager = RoleMessageManager(this)
 
     init {
     }

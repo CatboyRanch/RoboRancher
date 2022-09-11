@@ -15,7 +15,7 @@ class RoleMessageManager(private val server: Server) {
         if(!rm.containsKey(messageID))
             rm[messageID] = HashMap()
         rm[messageID]?.set(emoji.formatted, role.id)
-        message.addReaction(emoji)
+        message.addReaction(emoji).queue()
     }
 
     fun removeRoleMessageEmoji(message: Message, emoji: Emoji) {
