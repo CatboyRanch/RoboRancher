@@ -20,6 +20,7 @@ class ServerConfigData {
     var praiseCooldown = 86400L
     var rules = ArrayList<String>()
     var cagedUsers = HashMap<String, ArrayList<String>>()
+    var roleMessages = HashMap<String, HashMap<String, String>>() //<id, roleMessage(<emoji>, <role>)
 }
 
 class ServerConfig(private val server: Server) {
