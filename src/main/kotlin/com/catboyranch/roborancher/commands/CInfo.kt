@@ -3,7 +3,6 @@ package com.catboyranch.roborancher.commands
 import com.catboyranch.roborancher.*
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
-
 class CInfo(rancher: RoboRancher): CommandBase(rancher) {
     override val name = "info"
     override val description = "Get info for user"
