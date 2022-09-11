@@ -2,6 +2,7 @@ package com.catboyranch.roborancher.managers
 
 import com.catboyranch.roborancher.ChannelUtils
 import com.catboyranch.roborancher.IFunction
+import com.catboyranch.roborancher.RoleUtils
 import com.catboyranch.roborancher.Server
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.Role
@@ -26,6 +27,8 @@ class RoleMessageManager(private val server: Server) {
         if(map.isEmpty())
             rm.remove(messageID)
     }
+
+    fun getRoleForMessageEmoji(messageID: String, emoji: Emoji): Role? = rm[messageID]?.get(emoji.formatted)?.let { RoleUtils.getRole(server, it) }
 
     fun ensureRoleMessageEmojis() {
         rm.forEach { (messageID, roleMessage) ->
