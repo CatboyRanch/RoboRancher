@@ -13,5 +13,6 @@ class Server(val guild: Guild) {
     val roleMessageManager = RoleMessageManager(this)
 
     init {
+        roleMessageManager.ensureRoleMessageEmojis()
     }
 }
