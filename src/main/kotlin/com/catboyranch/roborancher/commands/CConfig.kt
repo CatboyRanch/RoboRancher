@@ -127,8 +127,11 @@ class CConfig(rancher: RoboRancher): CommandBase(rancher) {
                             return
                         }
                         var rule = ""
-                        for(i in 3 until args.size)
-                            rule += " ${args[i].text}"
+                        for(i in 3 until args.size) {
+                            if(i != 3)
+                                rule += " "
+                            rule += args[i].text
+                        }
                         rm.addRule(index, rule)
                     }
                     "remove" -> rm.removeRule(args[2].text.toInt())
