@@ -32,6 +32,8 @@ class RoboRancher {
         cmdManager.registerCommand(CUncage(this))
         cmdManager.registerCommand(CInfo(this))
         cmdManager.registerCommand(CRule(this))
+        jda.addEventListener(JoinListener(this))
+        jda.addEventListener(MessageListener(this))
 
         jda.guilds.forEach { servers.add(Server(it)) }
     }
