@@ -15,7 +15,7 @@ class RoleMessageManager(private val server: Server) {
         val messageID = message.id
         if(!rm.containsKey(messageID))
             rm[messageID] = HashMap()
-        rm[messageID]?.set(emoji.formatted, role.id)
+        rm[messageID]?.set(emoji.asReactionCode, role.id)
         message.addReaction(emoji).queue()
     }
 
@@ -23,12 +23,12 @@ class RoleMessageManager(private val server: Server) {
         val messageID = message.id
         val map = rm[messageID] ?: return
         message.removeReaction(emoji).queue()
-        map.remove(emoji.formatted)
+        map.remove(emoji.asReactionCode)
         if(map.isEmpty())
             rm.remove(messageID)
     }
 
-    fun getRoleForMessageEmoji(messageID: String, emoji: Emoji): Role? = rm[messageID]?.get(emoji.formatted)?.let { RoleUtils.getRole(server, it) }
+    fun getRoleForMessageEmoji(messageID: String, emoji: Emoji): Role? = rm[messageID]?.get(emoji.asReactionCode)?.let { RoleUtils.getRole(server, it) }
 
     fun ensureRoleMessageEmojis() {
         rm.forEach { (messageID, roleMessage) ->
